@@ -21,16 +21,18 @@ class MainPage(webapp2.RequestHandler):
 	def get(self):
 		template = jinja_environment.get_template('index.html')
 
-		top_msg = 'Hello, world 3!'
+		top_msg = 'Hello, world 4!'
 
 		# facebook
 		user = facebook.get_user_from_cookie(self.request.cookies, FACEBOOK_APP_ID, FACEBOOK_APP_SECRET)
 		if user:
+			fb_logged = True
 			graph = facebook.GraphAPI(user["access_token"])
 			profile = graph.get_object("me")
-			friends = graph.get_connections("me", "friends")
-			fb_logged = True
-			user_msg = "user = " + pprint.pformat(user)
+			# friends = graph.get_connections("me", "friends")
+			user_msg = '<a href="' + profile["link"] + '"><img src="//graph.facebook.com/' + user["uid"] + '/picture?type=square" border="0" /> ' + profile["name"] + '</a>'
+			user_msg += "\nuser = " + pprint.pformat(user)
+			user_msg += '\nprofile = ' + pprint.pformat(profile)
 		else:
 			fb_logged = False
 			user_msg = ''

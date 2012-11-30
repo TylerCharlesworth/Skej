@@ -19,11 +19,12 @@
 
     // Additional init code here
     FB.getLoginStatus(function(response) {
+    	console.log("INIT");
     	console.log(response);
 	    if (response.status === 'connected') {
 	        console.log("connected");
 	        {% if not fb_logged %}
-	        window.location.href = window.location.href;
+	        window.location.href = window.location.href; // refresh because server fb status different from client status
 	        {% endif %}
 	        document.getElementById('login').style.display = "none";
 	        FB.api('/me', function(response) {
@@ -49,22 +50,8 @@
      ref.parentNode.insertBefore(js, ref);
    }(document));
 
-function login() {
-    FB.login(function(response) {
-        if (response.authResponse) {
-            console.log("now logged in!");
-            window.location.href = window.location.href; // refresh page for server to pick up status
-        } else {
-            console.log("login canceled");
-        }
-    });
-}
-
-function logout() {
-    FB.logout(function(response) {
-        console.log('User is now logged out');
-        window.location.href = window.location.href; // refresh page for server to pick up status
-    });
+function login_state_changed() {
+	window.location.href = window.location.href; // refresh page for server to pick up status
 }
 </script>
 
@@ -72,10 +59,11 @@ function logout() {
 <hr />
 
 <p>
+	<fb:login-button autologoutlink="true" onlogin="login_state_changed()" size="xlarge"></fb:login-button>
+	<br /><fb:facepile app_id="{{ FACEBOOK_APP_ID }}"></fb:facepile>
+</p>
+<p>
 	<pre>{{ user_msg }}</pre>
-	<br />
-	<a {{ 'style="display:none;"' if fb_logged }} id="login" onclick="login();" href="javascript:void(0);">Facebook Login</a>
-	<a {{ 'style="display:none;"' if not fb_logged }} id="logout" onclick="logout();" href="javascript:void(0);">Facebook Logout</a>
 </p>
 
 <hr />

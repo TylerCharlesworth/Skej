@@ -5,21 +5,26 @@ api_version: 1
 threadsafe: true
 
 handlers:
-# static dirs
-# --- images
+# --- static files
+# favicon
+- url: /favicon.ico
+  static_files: static/img/favicon.ico
+  upload: static/img/favicon.ico
+# --- static dirs
+# images
 - url: /i
   static_dir: static/img
-# --- javascript
+# javascript
 - url: /j
   static_dir: static/js
-# --- css
+# css
 - url: /c
   static_dir: static/css
-# --- html
+# html
 - url: /h
   static_dir: static/html
   expiration: '365d'
-# main
+# --- application
 - url: .*
   script: home.app
 
