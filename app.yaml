@@ -5,14 +5,10 @@ api_version: 1
 threadsafe: true
 
 handlers:
-# main
-- url: .*
-  script: home.app
 # static dirs
 # --- images
-- url: /i/(.*)
-  static_files: static/img/\1
-  upload: static/img/(.*)
+- url: /i
+  static_dir: static/img
 # --- javascript
 - url: /j
   static_dir: static/js
@@ -23,6 +19,9 @@ handlers:
 - url: /h
   static_dir: static/html
   expiration: '365d'
+# main
+- url: .*
+  script: home.app
 
 libraries:
 - name: jinja2

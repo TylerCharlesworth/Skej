@@ -22,6 +22,9 @@
     	console.log(response);
 	    if (response.status === 'connected') {
 	        console.log("connected");
+	        {% if not fb_logged %}
+	        window.location.href = window.location.href;
+	        {% endif %}
 	        document.getElementById('login').style.display = "none";
 	        FB.api('/me', function(response) {
 			   console.log(response);
