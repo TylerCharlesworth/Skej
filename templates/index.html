@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<head>
+    <title>Skej Home</title>
+</head>
+
+<body>
+<div id="fb-root"></div>
+<script>
+  // Additional JS functions here
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '{{ FACEBOOK_APP_ID }}', // App ID
+      channelUrl : '{{ DOMAIN }}/channel.html', // Channel File
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true  // parse XFBML
+    });
+
+    // Additional init code here
+    FB.getLoginStatus(function(response) {
+    	console.log(response);
+	    if (response.status === 'connected') {
+	        console.log("connected");
+	        document.getElementById('login').style.display = "none";
+	        FB.api('/me', function(response) {
+			   console.log(response);
+			});
+	    } else if (response.status === 'not_authorized') {
+	        console.log("not authorized");
+	        document.getElementById('logout').style.display = "none"
+	    } else {
+	        console.log("not logged in");
+	        document.getElementById('logout').style.display = "none"
+	    }
+	});
+
+  };
+
+  // Load the SDK Asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     ref.parentNode.insertBefore(js, ref);
+   }(document));
+
+function login() {
+    FB.login(function(response) {
+        if (response.authResponse) {
+            console.log("now logged in!");
+            window.location.href = window.location.href; // refresh page for server to pick up status
+        } else {
+            console.log("login canceled");
+        }
+    });
+}
+
+function logout() {
+    FB.logout(function(response) {
+        console.log('User is now logged out');
+        window.location.href = window.location.href; // refresh page for server to pick up status
+    });
+}
+</script>
+
+<b>{{ top_msg }}</b>
+<hr />
+
+<p>
+	<pre>{{ user_msg }}</pre>
+	<br />
+	<a {{ 'style="display:none;"' if fb_logged }} id="login" onclick="login();" href="javascript:void(0);">Facebook Login</a>
+	<a {{ 'style="display:none;"' if not fb_logged }} id="logout" onclick="logout();" href="javascript:void(0);">Facebook Logout</a>
+</p>
+
+<hr />
+<a href="/">/</a>
+<br /><a href="/home">/home</a>
+<br /><a href="/create">/create</a>
+<br /><a href="/e/{{ random_event_id }}">/e/{{ random_event_id }}</a>
+
+</body>
+</html>

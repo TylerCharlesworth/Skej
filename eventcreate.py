@@ -28,10 +28,11 @@ class MainPage(webapp2.RequestHandler):
 		self.response.write('<br /><a href="/e/'+random_event_id+'">/e/'+random_event_id+'</a>')
 
 	def post(self):
-	    event = Event()
-	    event.admin = self.request.get('admin_id')
-	    event.eventid = self.request.get('id')
-	    event.title = self.request.get('title')
-	    event.description = self.request.get('description')
+	    event = Event(
+	    	admin = self.request.get('admin_id'),
+	    	eventid = self.request.get('id'),
+	    	title = self.request.get('title'),
+	    	description = self.request.get('description')
+	    	)
 	    event.put()
-	    self.redirect('/e/')
+	    self.redirect('/e/' + self.request.get('id'))
