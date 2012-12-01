@@ -10,9 +10,10 @@ from model import *
 class MainPage(webapp2.RequestHandler):
 	def get(self, event_id):
 		self.response.write('Hello, event '+event_id+'!')
+		
 		# look for event in db
-		q = Event.gql("WHERE eventid=:1", event_id)
-		event = q.get()
+		event = Event.all().filter('eventid =', event_id).get()
+
 		if event:
 			self.response.write('<br /><pre><b>Event:</b> ' + event.eventid + '\n<b>Admin:</b> ' + event.admin + '\n<b>Title:</b> ' + event.title + '\n<b>Desc:</b> ' + event.description + '</pre>')
 		else:

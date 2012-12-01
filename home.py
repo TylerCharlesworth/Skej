@@ -1,5 +1,5 @@
 # python libs
-import random, string, os, pprint
+import os, pprint
 # gae libs
 import webapp2, jinja2
 # third party libs
@@ -11,6 +11,7 @@ import eventcreate, eventview
 FACEBOOK_APP_ID = "496743440358938"
 FACEBOOK_APP_SECRET = "490fa8b35557153faba84c2eb37d0d0c"
 TEMPLATES_DIR = 'templates'
+TESTING = os.environ['SERVER_SOFTWARE'].startswith('Dev')
 
 # global vars
 jinja_environment = jinja2.Environment(
@@ -41,7 +42,6 @@ class MainPage(webapp2.RequestHandler):
 		template_values = {
 			'FACEBOOK_APP_ID': FACEBOOK_APP_ID,
 			'DOMAIN': 'http://localhost:8080',
-			'random_event_id': ''.join(random.choice(string.ascii_lowercase + string.digits) for i in xrange(10)),
 			'top_msg': top_msg,
 			'fb_logged': fb_logged,
 			'user_msg': user_msg,
