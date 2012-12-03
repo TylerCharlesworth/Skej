@@ -5,15 +5,11 @@ import webapp2
 from google.appengine.ext import db
 # project libs
 from model import *
-from common import Common
+from common import Vars, RequestHandler
 
-class MainPage(webapp2.RequestHandler):
+class MainPage(RequestHandler):
 	def get(self, event_id):
-		tvals = {
-			'FACEBOOK_APP_ID': Common.FACEBOOK_APP_ID,
-			'DOMAIN': Common.DOMAIN,
-		}
-
+		tvals = self.tvals
 		tvals['top'] = 'Hello, event '+event_id+'!'
 		
 		# look for event in db
@@ -27,5 +23,4 @@ class MainPage(webapp2.RequestHandler):
 			tvals['title'] = 'Event Not Found'
 	
 		# template render
-		template = Common.JINJA.get_template('view.html')
-		self.response.write(template.render(tvals))
+		self.render('view.html')

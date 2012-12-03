@@ -1,20 +1,12 @@
 # python libs
 import random, string
-# gae libs
-import webapp2
-# third party libs
-from libs import facebook
 # project libs
 from model import *
-from common import Common
+from common import Vars, RequestHandler
 
-class MainPage(webapp2.RequestHandler):
+class MainPage(RequestHandler):
 	def get(self):
-		tvals = {
-			'FACEBOOK_APP_ID': Common.FACEBOOK_APP_ID,
-			'DOMAIN': Common.DOMAIN,
-		}
-
+		tvals = self.tvals
 		tvals['top'] = 'Hello, create event page!'
 
 		tvals['content'] = """\
@@ -29,18 +21,14 @@ class MainPage(webapp2.RequestHandler):
 """
 
 		# template render
-		template = Common.JINJA.get_template('create.html')
-		self.response.write(template.render(tvals))
+		self.render('create.html')
 
 	def post(self):
-		user = None
-		if Common.TESTING:
-			user = { 'uid': "TESTER", }
-		else:
-			user = facebook.get_user_from_cookie(self.request.cookies, Common.FACEBOOK_APP_ID, Common.FACEBOOK_APP_SECRET)
-		if user: 
+		if Vars.TESTING:
+			self.profile = { 'id': "TESTER", }
+		if self.profile: 
 		    event = Event(
-		    	admin = user["uid"],
+		    	admin = self.profile["id"],
 		    	eventid = ''.join(random.choice(string.ascii_lowercase + string.digits) for i in xrange(10)),
 		    	title = self.request.get('title'),
 		    	description = self.request.get('description')

@@ -1,35 +1,18 @@
 # python libs
 import pprint
-# gae libs
-import webapp2
-# third party libs
-from libs import facebook
 # project libs
-from common import Common
+from common import Vars, RequestHandler
 
-class MainPage(webapp2.RequestHandler):
+class MainPage(RequestHandler):
 	def get(self):
-		tvals = {
-			'FACEBOOK_APP_ID': Common.FACEBOOK_APP_ID,
-			'DOMAIN': Common.DOMAIN,
-		}
-
+		tvals = self.tvals
 		tvals['top'] = 'Hello, world!'
 
-		# facebook
-		user = facebook.get_user_from_cookie(self.request.cookies, Common.FACEBOOK_APP_ID, Common.FACEBOOK_APP_SECRET)
-		if user:
-			tvals['loggedin'] = True
-			graph = facebook.GraphAPI(user["access_token"])
-			profile = graph.get_object("me")
-			# friends = graph.get_connections("me", "friends")
-			tvals['content'] = '<a href="' + profile["link"] + '"><img src="//graph.facebook.com/' + user["uid"] + '/picture?type=square" border="0" /> ' + profile["name"] + '</a>'
-			tvals['content'] += "\nuser = " + pprint.pformat(user)
-			tvals['content'] += '\nprofile = ' + pprint.pformat(profile)
+		if self.profile:
+			tvals['content'] = '<a href="' + self.profile["link"] + '"><img src="//graph.facebook.com/' + self.profile["id"] + '/picture?type=square" border="0" /> ' + self.profile["name"] + '</a>'
+			tvals['content'] += '\nprofile = ' + pprint.pformat(self.profile)
 		else:
-			tvals['loggedin'] = False
 			tvals['content'] = ''
 		
 		# template render
-		template = Common.JINJA.get_template('home.html')
-		self.response.write(template.render(tvals))
+		self.render("home.html")

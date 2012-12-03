@@ -23,7 +23,7 @@
     	console.log(response);
 	    if (response.status === 'connected') {
 	        console.log("connected");
-	        {% if not fb_logged %}
+	        {% if not profile %}
 	        window.location.href = window.location.href; // refresh because server fb status different from client status
 	        {% endif %}
 	        document.getElementById('login').style.display = "none";
