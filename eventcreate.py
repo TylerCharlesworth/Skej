@@ -1,21 +1,23 @@
 # python libs
-import random, string, pprint, logging, os
+import random, string
 # gae libs
 import webapp2
 # third party libs
 from libs import facebook
 # project libs
 from model import *
-
-# TODO dry... move this elsewhere
-FACEBOOK_APP_ID = "496743440358938"
-FACEBOOK_APP_SECRET = "490fa8b35557153faba84c2eb37d0d0c"
-TESTING = os.environ['SERVER_SOFTWARE'].startswith('Dev')
+from common import Common
 
 class MainPage(webapp2.RequestHandler):
 	def get(self):
-		self.response.write('Hello, create event page!')
-		self.response.write("""\
+		tvals = {
+			'FACEBOOK_APP_ID': Common.FACEBOOK_APP_ID,
+			'DOMAIN': Common.DOMAIN,
+		}
+
+		tvals['top'] = 'Hello, create event page!'
+
+		tvals['content'] = """\
 <div style="border:1px dotted black; width: 300px;">
 <center><b>Create An Event</b></center>
 <form action="/create" method="post">
@@ -24,20 +26,18 @@ class MainPage(webapp2.RequestHandler):
 <br /><center><input type="submit" value="Create" /></center>
 </form>
 </div>
-""")
-		# nav
-		self.response.write('<br /><a href="/">/</a>')
-		self.response.write('<br /><a href="/home">/home</a>')
-		self.response.write('<br /><a href="/create">/create</a>')
-		random_event_id = ''.join(random.choice(string.ascii_lowercase + string.digits) for i in xrange(10))
-		self.response.write('<br /><a href="/e/'+random_event_id+'">/e/'+random_event_id+'</a>')
+"""
+
+		# template render
+		template = Common.JINJA.get_template('create.html')
+		self.response.write(template.render(tvals))
 
 	def post(self):
 		user = None
-		if TESTING:
+		if Common.TESTING:
 			user = { 'uid': "TESTER", }
 		else:
-			user = facebook.get_user_from_cookie(self.request.cookies, FACEBOOK_APP_ID, FACEBOOK_APP_SECRET)
+			user = facebook.get_user_from_cookie(self.request.cookies, Common.FACEBOOK_APP_ID, Common.FACEBOOK_APP_SECRET)
 		if user: 
 		    event = Event(
 		    	admin = user["uid"],

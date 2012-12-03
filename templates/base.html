@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html lang="en">
 <head>
-    <title>Skej Home</title>
+    <title>{% block title %}{% endblock %} - Skej</title>
 </head>
 
 <body>
@@ -11,7 +11,7 @@
   window.fbAsyncInit = function() {
     FB.init({
       appId      : '{{ FACEBOOK_APP_ID }}', // App ID
-      channelUrl : '{{ DOMAIN }}/channel.html', // Channel File
+      channelUrl : '//{{ DOMAIN }}/channel.html', // Channel File
       status     : true, // check login status
       cookie     : true, // enable cookies to allow the server to access the session
       xfbml      : true  // parse XFBML
@@ -55,21 +55,18 @@ function login_state_changed() {
 }
 </script>
 
-<b>{{ top_msg }}</b>
+<b>{% block header %}{% endblock %}</b>
 <hr />
 
-<p>
-	<fb:login-button autologoutlink="true" onlogin="login_state_changed()" size="xlarge"></fb:login-button>
-	<br /><fb:facepile app_id="{{ FACEBOOK_APP_ID }}"></fb:facepile>
-</p>
-<p>
-	<pre>{{ user_msg }}</pre>
-</p>
+{% block content %}{% endblock %}
 
+{% block footer %}
 <hr />
 <a href="/">/</a>
 <br /><a href="/home">/home</a>
 <br /><a href="/create">/create</a>
+<br /><a href="/e/asdf">/e/asdf</a>
+{% endblock %}
 
 </body>
 </html>

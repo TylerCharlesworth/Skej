@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block header %}
+{{ top }}
+{% endblock %}
+
+{% block content %}
+<p>
+	<fb:login-button autologoutlink="true" onlogin="login_state_changed()" size="xlarge"></fb:login-button>
+	<br /><fb:facepile app_id="{{ FACEBOOK_APP_ID }}"></fb:facepile>
+</p>
+<p>
+	<pre>{{ content }}</pre>
+</p>
+{% endblock %}
