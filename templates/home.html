@@ -12,6 +12,7 @@
 	<br /><fb:facepile app_id="{{ FACEBOOK_APP_ID }}"></fb:facepile>
 </p>
 <p>
-	<pre>{{ content }}</pre>
+	{{ content }}
+	<pre>{{ users|pprint }}</pre>
 </p>
 {% endblock %}

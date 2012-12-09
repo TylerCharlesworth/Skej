@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}My Events{% endblock %}
+
+{% block header %}
+<b>My Events</b>
+{% endblock %}
+
+{% block content %}
+{% if not events %}
+No Events Yet
+{% else %}
+<ul>
+{% for event in events|sort(attribute='createdate') %}
+<li>
+	<a href="/e/{{ event.eventid }}">{{ event.title }}</a>
+	{{ '(admin)' if (event.admin == currentuser) }}
+	{{ '(attending)' if (currentuser in event.attendees) }}
+</li>
+{% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

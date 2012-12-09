@@ -23,7 +23,7 @@
     	console.log(response);
 	    if (response.status === 'connected') {
 	        console.log("connected");
-	        {% if not profile %}
+	        {% if not users %}
 	        window.location.href = window.location.href; // refresh because server fb status different from client status
 	        {% endif %}
 	        document.getElementById('login').style.display = "none";
@@ -55,6 +55,17 @@ function login_state_changed() {
 }
 </script>
 
+<p>
+	{% if currentuser and users %}
+		<a href="{{ users[currentuser|string]['link'] }}">
+			<img src="{{ users[currentuser|string]['picture']['data']['url'] }}" /> 
+			{{ users[currentuser|string]['name'] }}
+		</a>
+	{% else %}
+		<a href="/home">Login</a>
+	{% endif %}
+</p>
+
 <b>{% block header %}{% endblock %}</b>
 <hr />
 
@@ -64,6 +75,7 @@ function login_state_changed() {
 <hr />
 <a href="/">/</a>
 <br /><a href="/home">/home</a>
+<br /><a href="/me">/me</a>
 <br /><a href="/create">/create</a>
 <br /><a href="/e/asdf">/e/asdf</a>
 {% endblock %}

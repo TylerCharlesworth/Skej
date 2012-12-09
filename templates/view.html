@@ -3,9 +3,22 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block header %}
-{{ top }}
+Hello, event "{{ eventid }}"!
 {% endblock %}
 
 {% block content %}
-{{ content }}
+{% if admin %}
+<pre>
+<b>Event:</b> {{ eventid }}
+<b>Admin:</b> {{ admin|string }}
+<b>Title:</b> {{ etitle }}
+<b>Desc:</b> {{ description }}
+<b>Max Attendees:</b> {{ (maxattendees or "Not Configured")|string }}
+<b>Attendees:</b> {{ attendees }}
+</pre>
+<form action="/e/{{ eventid }}" method="post"><input type="submit" name="attend" value="Attend" /></form>
+<form action="/e/{{ eventid }}" method="post"><input type="submit" name="unattend" value="Unattend" /></form>
+{% else %}
+Event {{ eventid }} is invalid.
+{% endif %}
 {% endblock %}

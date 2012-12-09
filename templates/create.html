@@ -3,9 +3,17 @@
 {% block title %}Create Event{% endblock %}
 
 {% block header %}
-{{ top }}
+Hello, create event page!
 {% endblock %}
 
 {% block content %}
-{{ content }}
+<div style="border:1px dotted black; width: 300px;">
+<center><b>Create An Event</b></center>
+<form action="/create" method="post">
+<br />Event Title: <input type="text" name="title" />
+<br />Description: <textarea name="description"></textarea>
+<br />Max Number of Attendees: <input type="number" name="maxattendees" />
+<br /><center><input type="submit" value="Create" /></center>
+</form>
+</div>
 {% endblock %}
